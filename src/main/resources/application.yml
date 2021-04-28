@@ -1,6 +1,26 @@
 spring:
   application:
-    name: user-service
+    name: user-service2
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: user2
+    password: tanqi1210
+    #虚拟host 可以不设置,使用server默认host
+    virtual-host: tcqLocal
+    listener:
+      type: simple
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 10
+        prefetch: 1 #在单个请求中处理的消息个数，他应该大于等于事务数量(unack的最大数量)
+        default-requeue-rejected: true #重试次数超过上面的设置之后是否丢弃（false不丢弃时需要写相应代码将该消息加入死信队列）
+        retry:
+            enabled: true #开启消费者重试机制(为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息)
+            max-attempts: 5 #重试次数5
+            initial-interval: 5000 #重试时间间隔
 server:
   port: 3032
 
